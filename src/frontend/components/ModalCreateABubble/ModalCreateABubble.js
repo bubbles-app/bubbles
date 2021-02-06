@@ -9,6 +9,8 @@ const MODAL_STYLES = {
     backgroundColor: 'none'
   },
   content: {
+    width: '15%',
+    minWidth: '200px',
     borderRadius: '10px',
     top: '50%',
     left: '50%',
@@ -23,16 +25,40 @@ const MODAL_STYLES = {
 
 function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
   const [ nickname, setNickname ] = useState('');
-  const handleSubmit = (e) => {
+  const [ networkErrorEncountered, setNetworkErrorEncountered ] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // TELL SOLACE TO CREATE NEW TOPIC
+    if (nickname !== '') {
+      // CREATE ROOM AND THEN JOIN THAT ROOM
 
-    // GO TO ROOM SCREEN
+      const roomCodeObject = await fetch('http://localhost:9000/createroom', { method: 'POST' }).then((response) =>
+        response.json()
+      );
+
+      const roomcode = roomCodeObject.message;
+      const payload = { roomcode: roomcode, username: nickname };
+
+      const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (joinRoomResponse.status === 200) {
+        // TODO:
+        // subscribe to topic
+        // redirect to room screen
+      } else {
+        setNetworkErrorEncountered(true);
+      }
+    }
 
     // RESET FORM AND CLOSE MODAL:
     setNickname('');
-    closeModal();
   };
 
   return (
@@ -52,8 +78,13 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
           onChange={(e) => setNickname(e.target.value)}
           maxLength={15}
         />
-        <button className="modal-submit-button">join</button>
+        <button className="modal-submit-button" disabled={nickname === ''}>
+          join
+        </button>
       </form>
+      <p style={{ marginBottom: 0, color: '#f44', display: networkErrorEncountered ? 'block' : 'none' }}>
+        Our servers are having some issues at the moment...
+      </p>
     </Modal>
   );
 }

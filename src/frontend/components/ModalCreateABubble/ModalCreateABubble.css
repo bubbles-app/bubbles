@@ -14,6 +14,7 @@
 
 .modal-name-input {
   border: none;
+  width: 100%;
   height: 30px;
   margin: 0;
   border-radius: 10px 0px 0px 10px;
@@ -38,6 +39,11 @@
 
   color: #fff;
   background-color: #8d6ca7;
+}
+
+.modal-submit-button:disabled {
+  background-color: #7c7c7c;
+  pointer-events: none;
 }
 
 /* ANIMATIONS: */
