@@ -1,0 +1,17 @@
+.RoomScreen {
+  min-height: 100vh;
+  display: flex;
+}
+
+.VideoSection {
+  padding: 20px;
+}
+
+.VideoSection {
+  width: 85%;
+}
+
+.VideoSection > * {
+  width: 100%;
+  height: 100%;
+}
