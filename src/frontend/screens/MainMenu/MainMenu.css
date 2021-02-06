@@ -1,0 +1,51 @@
+.MainMenu {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-size: 3em;
+  font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif;
+  margin: 10px;
+}
+
+.logo-pic {
+  width: 50px;
+}
+
+.menu-buttons {
+  display: flex;
+}
+
+.menu-button {
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 12px;
+  z-index: 0;
+
+  cursor: pointer;
+  -webkit-user-select: none;
+
+  color: #000; /* Fallback for older browsers */
+  color: rgba(0, 0, 0, 0.5);
+  background: #fff;
+  -webkit-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+}
+
+.menu-button:hover {
+  background-color: #e6e6e6;
+  -webkit-transition: background-color 100ms linear;
+  -ms-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+}

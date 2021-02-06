@@ -1,0 +1,72 @@
+.modal-header {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #8d6ca7;
+}
+
+.modal-join-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modal-join-form > * {
+  width: 100%;
+}
+
+.modal-join-header {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #8d6ca7;
+}
+
+.modal-join-header:not(:first-child) {
+  margin-top: 30px;
+}
+
+.modal-join-code-input,
+.modal-join-name-input {
+  border: none;
+  height: 30px;
+  margin: 0;
+  border-radius: 10px;
+  background-color: #c4c4c4;
+}
+
+.modal-join-submit-button:focus,
+.modal-join-code-input:focus,
+.modal-join-name-input:focus {
+  outline: none;
+}
+
+.modal-join-submit-button {
+  cursor: pointer;
+  font-size: 100%;
+  font-family: inherit;
+  border: 0;
+  margin-top: 30px;
+  /* padding: 10px; */
+  height: 30px;
+  width: 100%;
+  border-radius: 10px;
+
+  color: #fff;
+  background-color: #8d6ca7;
+}
+
+/* ANIMATIONS: */
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
