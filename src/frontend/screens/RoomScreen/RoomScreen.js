@@ -7,21 +7,13 @@ function RoomScreen(props) {
   if (!props.location.state) return <Redirect to="/" />;
   const { roomcode, nickname } = props.location.state;
 
-  const videoOptions = {
-    autoplay: true,
-    controls: true,
-    sources: [
-      {
-        src: 'https://www.youtube.com/watch?v=0NDv0Qqq6F0',
-        type: 'video/youtube'
-      }
-    ]
-  };
+  let video = new Video();
+
   return (
     <div className="RoomScreen">
-      <SideBar roomcode={roomcode} />
+      <SideBar roomcode={roomcode} queueVideo={video.playNewVideo}/>
       <div className="VideoSection">
-        <Video {...videoOptions} />
+        {video.render()}
       </div>
     </div>
   );
