@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import ModalPlayVideo from '../ModalPlayVideo/ModalPlayVideo';
 import SideBarLabel from '../SideBarLabel/SideBarLabel';
 import SideBarList from '../SideBarList/SideBarList';
+import SideBarChat from '../SideBarChat/SideBarChat';
 import './SideBar.css';
 
 import solaceConnection from '../../../backend/solace-connection';
 
-function SideBar({ roomcode, queueVideo }) {
+function SideBar({ roomcode, username, queueVideo }) {
   const [ isPlayModalOpen, setIsPlayModalOpen ] = useState(false);
   const [ roomMembers, setRoomMembers ] = useState([]);
 
@@ -28,10 +29,15 @@ function SideBar({ roomcode, queueVideo }) {
   }, []);
 
   const handleNewUser = (message) => {
+    console.log('old members', roomMembers);
+
     try {
       const obj = JSON.parse(message.payloadString);
       if (obj.messageType === 'userJoined') {
-        setRoomMembers([ ...roomMembers, obj.username ]);
+        setRoomMembers((roomMembers) => {
+          console.log('OLD MEMBERS', roomMembers);
+          return [ ...roomMembers, obj.username ];
+        });
       }
     } catch (error) {
       console.log(error);
@@ -43,6 +49,7 @@ function SideBar({ roomcode, queueVideo }) {
       <div className="SideBar-Top">
         <SideBarLabel label={roomcode} className="RoomCodeLabel" />
         <SideBarList list={roomMembers} roomcode={roomcode} />
+        <SideBarChat roomcode={roomcode} username={username} />
       </div>
       <div className="SideBar-Buttons">
         <button className="play-button" onClick={() => setIsPlayModalOpen(true)}>
@@ -55,6 +62,7 @@ function SideBar({ roomcode, queueVideo }) {
         closeModal={() => setIsPlayModalOpen(false)}
         contentLabel="Play Video"
         queueVideo={queueVideo}
+        roomcode={roomcode}
       />
     </div>
   );

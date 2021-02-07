@@ -12,10 +12,8 @@ function RoomScreen(props) {
 
   return (
     <div className="RoomScreen">
-      <SideBar roomcode={roomcode} queueVideo={video.playNewVideo}/>
-      <div className="VideoSection">
-        {video.render()}
-      </div>
+      <SideBar roomcode={roomcode} queueVideo={video.playNewVideo} username={nickname} />
+      <div className="VideoSection">{video.render()}</div>
     </div>
   );
 }
