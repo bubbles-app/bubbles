@@ -5,40 +5,40 @@
     color: #8d6ca7;
   }
   
-  .modal-playlist-form {
+  .modal-play-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
   
-  .modal-playlist-form > * {
+  .modal-play-form > * {
     width: 100%;
   }
   
-  .modal-playlist-header {
+  .modal-play-header {
     margin: 0;
     font-size: 24px;
     font-weight: 700;
     color: #8d6ca7;
   }
   
-  .modal-playlist-header:not(:first-child) {
+  .modal-play-header:not(:first-child) {
     margin-top: 30px;
   }
   
-  .modal-playlist-input {
+  .modal-play-input {
     border: none;
     height: 30px;
     border-radius: 10px;
     background-color: #c4c4c4;
   }
   
-  .modal-playlist-submit-button:focus,
-  .modal-playlist-input:focus {
+  .modal-play-submit-button:focus,
+  .modal-play-input:focus {
     outline: none;
   }
   
-  .modal-playlist-submit-button {
+  .modal-play-submit-button {
     cursor: pointer;
     font-size: 100%;
     font-family: inherit;

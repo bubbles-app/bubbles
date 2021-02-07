@@ -2,19 +2,22 @@ import React, { Component } from 'react';
 import YouTube from 'react-youtube';
 
 class VideoApp extends Component {
-  player = {}
-  state = {
-    video: {
-      id: "0NDv0Qqq6F0",
-      options: {
+  constructor(props) {
+    super(props);
+    this.player = null;
+    this.playNewVideo = this.playNewVideo.bind(this);
+    this.videoId = "";
+    this.state = {
+      videoOptions: {
         height: '100%',
         width: '100%',
       }
     }
   }
   
-  addVideoToQueue(videoUrl) {
-    this.player.cueVideoByUrl(videoUrl, 0);
+  playNewVideo(videoId) {
+    this.videoId = videoId;
+    this.player.loadVideoById(this.videoId, 0);
   }
 
   onPlayerReady(event) {
@@ -49,9 +52,9 @@ class VideoApp extends Component {
   render() {
     return (
       <YouTube
-        videoId={this.state.video.id}
+        videoId={this.videoId}
         className={"Video"}
-        opts={this.state.video.options}
+        opts={this.state.videoOptions}
         onReady={this.onPlayerReady.bind(this)}
         onPlay={this.onVideoPlay.bind(this)}
         onPause={this.onVideoPause.bind(this)}

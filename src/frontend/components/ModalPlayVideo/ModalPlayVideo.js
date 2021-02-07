@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-import './ModalAddToPlaylist.css';
+import './ModalPlayVideo.css';
 
 Modal.setAppElement('#modal-portal');
 
@@ -20,13 +20,12 @@ const MODAL_STYLES = {
   }
 };
 
-function ModalAddToPlaylist({ isOpen, closeModal, contentLabel }) {
+function ModalPlayVideo({ isOpen, closeModal, contentLabel, queueVideo }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Use regex to get video ID and add to playlist
     try {
       let url = new URL(document.getElementById("youtube-link-input").value);
-      return url;
+      queueVideo(url.searchParams.get('v'));
     } catch (error) {
       console.log(error);
     }
@@ -42,17 +41,17 @@ function ModalAddToPlaylist({ isOpen, closeModal, contentLabel }) {
       style={MODAL_STYLES}
       contentLabel={contentLabel}
     >
-      <p className="modal-playlist-header">youtube video url</p>
-      <form className="modal-playlist-form" onSubmit={handleSubmit}>
+      <p className="modal-play-header">youtube video url</p>
+      <form className="modal-play-form" onSubmit={handleSubmit}>
         <input
           id="youtube-link-input"
-          className="modal-playlist-input"
+          className="modal-play-input"
           type="text"
         />
-        <button className="modal-playlist-submit-button">add</button>
+        <button className="modal-play-submit-button">play</button>
       </form>
     </Modal>
   );
 }
 
-export default ModalAddToPlaylist;
+export default ModalPlayVideo;
