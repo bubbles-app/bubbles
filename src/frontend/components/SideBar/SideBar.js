@@ -4,7 +4,7 @@ import SideBarLabel from '../SideBarLabel/SideBarLabel';
 import SideBarList from '../SideBarList/SideBarList';
 import './SideBar.css';
 
-function SideBar({ roomcode }) {
+function SideBar({ roomcode, queueVideo }) {
   const [ isPlayModalOpen, setIsPlayModalOpen ] = useState(false);
   const [ roomMembers, setRoomMembers ] = useState([]);
 
