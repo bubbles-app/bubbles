@@ -1,0 +1,23 @@
+.SideBarChat {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.SideBarChat-Item {
+  margin: 10px;
+}
+
+.SideBarChat-Form > input:focus {
+  outline: none;
+}
+
+.SideBarChat-Form > input {
+  width: 100%;
+  background-color: #c4c4c4;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
