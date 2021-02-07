@@ -23,12 +23,12 @@ class VideoApp extends Component {
   handleMessage(message) {
     const obj = JSON.parse(message.payloadString);
     console.log("Handle message here!");
-    if(obj.message === 'Play press detected'){
+    if(obj.messageType === 'playPressed'){
       this.playVideo();
     }
     
-    if(obj.message === 'Pause press detected'){
- 	    this.pauseVideo();
+    if(obj.messageType === 'pausePressed'){
+ 	this.pauseVideo();
     }
   }
   
@@ -55,14 +55,14 @@ class VideoApp extends Component {
   onVideoPlay(event) {
     console.log("Video played at: ", event.target.getCurrentTime());
     
-    let message = new Paho.Message(JSON.stringify({message: 'Play press detected'}));//messageType: 'playPressed', message: 'Play press detected'}));
+    let message = new Paho.Message(JSON.stringify({messageType: 'playPressed', message: 'Play press detected'}));
     message.destinationName = this.props.roomcode;
     solaceConnection.send(message);
   }
 
   onVideoPause(event) {
     console.log("Video paused at: ", event);
-    let message = new Paho.Message(JSON.stringify({message: 'Pause press detected'}));//messageType: 'pausePressed', message: 'Pause press detected'}));
+    let message = new Paho.Message(JSON.stringify({messageType: 'pausePressed', message: 'Pause press detected'}));
     message.destinationName = this.props.roomcode;
     solaceConnection.send(message);
   }
