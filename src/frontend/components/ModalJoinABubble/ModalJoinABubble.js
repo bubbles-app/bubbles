@@ -48,35 +48,44 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = { roomcode: roomcode, username: nickname };
+    try {
+      const payload = { roomcode: roomcode, username: nickname };
 
-    const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+      const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
 
-    if (joinRoomResponse.status === 200) {
-      // subscribe to topic
-      solaceConnection
-        .connectWithPromise()
-        .then((response) => {
-          console.log('Succesfully connected to Solace Cloud.', response);
-          solaceConnection.subscribe(roomcode);
+      if (joinRoomResponse.status === 200) {
+        // subscribe to topic
+        solaceConnection
+          .connectWithPromise()
+          .then((response) => {
+            console.log('Succesfully connected to Solace Cloud.', response);
+            solaceConnection.subscribe(roomcode);
 
-          // redirect to room screen
-          setRedirectToRoomScreen(true);
-        })
-        .catch((error) => {
-          console.log('Unable to establish connection with Solace Cloud, see above logs for more details.', error);
-        });
-    } else {
+            // redirect to room screen
+            setRedirectToRoomScreen(true);
+          })
+          .catch((error) => {
+            console.log('Unable to establish connection with Solace Cloud, see above logs for more details.', error);
+            resetForm();
+          });
+      } else {
+        setNetworkErrorEncountered(true);
+        resetForm();
+      }
+    } catch (error) {
+      console.log(error);
       setNetworkErrorEncountered(true);
+      resetForm();
     }
+  };
 
-    // RESET FORM:
+  const resetForm = () => {
     setRoomCode('');
     setNickname('');
   };

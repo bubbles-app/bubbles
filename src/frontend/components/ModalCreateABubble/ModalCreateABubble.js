@@ -50,43 +50,52 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
     if (nickname !== '') {
       // CREATE ROOM AND THEN JOIN THAT ROOM
 
-      const roomCodeObject = await fetch('http://localhost:9000/createroom', { method: 'POST' }).then((response) =>
-        response.json()
-      );
+      try {
+        const roomCodeObject = await fetch('http://localhost:9000/createroom', { method: 'POST' }).then((response) =>
+          response.json()
+        );
 
-      const roomcode = roomCodeObject.message;
-      const payload = { roomcode: roomcode, username: nickname };
-      setNewRoomCode(roomcode);
+        const roomcode = roomCodeObject.message;
+        const payload = { roomcode: roomcode, username: nickname };
+        setNewRoomCode(roomcode);
 
-      const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
+        const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
 
-      if (joinRoomResponse.status === 200) {
-        solaceConnection
-          .connectWithPromise()
-          .then((response) => {
-            console.log('Succesfully connected to Solace Cloud.', response);
-            // subscribe to topic
-            solaceConnection.subscribe(roomcode);
-            console.log(solaceConnection);
+        if (joinRoomResponse.status === 200) {
+          solaceConnection
+            .connectWithPromise()
+            .then((response) => {
+              console.log('Succesfully connected to Solace Cloud.', response);
+              // subscribe to topic
+              solaceConnection.subscribe(roomcode);
+              console.log(solaceConnection);
 
-            // redirect
-            setRedirectToRoomScreen(true);
-          })
-          .catch((error) => {
-            console.log('Unable to establish connection with Solace Cloud, see above logs for more details.', error);
-          });
-      } else {
+              // redirect
+              setRedirectToRoomScreen(true);
+            })
+            .catch((error) => {
+              console.log('Unable to establish connection with Solace Cloud, see above logs for more details.', error);
+              resetForm();
+            });
+        } else {
+          setNetworkErrorEncountered(true);
+          resetForm();
+        }
+      } catch (error) {
+        console.log(error);
         setNetworkErrorEncountered(true);
+        resetForm();
       }
     }
+  };
 
-    // RESET FORM AND CLOSE MODAL:
+  const resetForm = () => {
     setNickname('');
   };
 
