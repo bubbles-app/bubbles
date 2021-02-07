@@ -62,6 +62,7 @@ function SideBar({ roomcode, username, queueVideo }) {
         closeModal={() => setIsPlayModalOpen(false)}
         contentLabel="Play Video"
         queueVideo={queueVideo}
+        roomcode={roomcode}
       />
     </div>
   );
