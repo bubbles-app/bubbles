@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import Modal from 'react-modal';
 import './ModalJoinABubble.css';
+
+import solaceConnection from '../../../backend/solace-connection';
 
 Modal.setAppElement('#modal-portal');
 
@@ -9,6 +12,8 @@ const MODAL_STYLES = {
     backgroundColor: 'none'
   },
   content: {
+    width: '15%',
+    minWidth: '200px',
     borderRadius: '10px',
     padding: '30px',
     top: '50%',
@@ -23,17 +28,53 @@ const MODAL_STYLES = {
 };
 
 function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
-  const [ roomCode, setRoomCode ] = useState('');
+  const [ roomcode, setRoomCode ] = useState('');
   const [ nickname, setNickname ] = useState('');
-  const handleSubmit = (e) => {
+  const [ networkErrorEncountered, setNetworkErrorEncountered ] = useState(false);
+  const [ redirectToRoomScreen, setRedirectToRoomScreen ] = useState(false);
+
+  if (redirectToRoomScreen) {
+    console.log('redirecting to', roomcode);
+    return (
+      <Redirect
+        to={{
+          pathname: '/room',
+          state: { roomcode, nickname }
+        }}
+      />
+    );
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // IF ROOM CODE IS VALID (by checking with backend):
-    // SUBSCRIBE TO THAT SOLACE TOPIC (room code)
-    // GO TO ROOM SCREEN
+    const payload = { roomcode: roomcode, username: nickname };
 
-    // ELSE
-    // DISPLAY ERROR MESSAGE
+    const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (joinRoomResponse.status === 200) {
+      // subscribe to topic
+      solaceConnection
+        .connectWithPromise()
+        .then((response) => {
+          console.log('Succesfully connected to Solace Cloud.', response);
+          solaceConnection.subscribe(roomcode);
+
+          // redirect to room screen
+          setRedirectToRoomScreen(true);
+        })
+        .catch((error) => {
+          console.log('Unable to establish connection with Solace Cloud, see above logs for more details.', error);
+        });
+    } else {
+      setNetworkErrorEncountered(true);
+    }
 
     // RESET FORM:
     setRoomCode('');
@@ -53,7 +94,7 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
         <input
           className="modal-join-code-input"
           type="text"
-          value={roomCode}
+          value={roomcode}
           onChange={(e) => setRoomCode(e.target.value)}
         />
         <p className="modal-join-header">nickname</p>
@@ -66,6 +107,9 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
         />
         <button className="modal-join-submit-button">join</button>
       </form>
+      <p style={{ marginBottom: 0, color: '#f44', display: networkErrorEncountered ? 'block' : 'none' }}>
+        Please enter a valid room code.
+      </p>
     </Modal>
   );
 }

@@ -1,12 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ModalCreateABubble from '../../components/ModalCreateABubble/ModalCreateABubble';
 import ModalJoinABubble from '../../components/ModalJoinABubble/ModalJoinABubble';
 import logo from '../../img/logo.svg';
 import './MainMenu.css';
 
+import solaceConnection from '../../../backend/solace-connection';
+
 function MainMenu() {
   const [ isJoinModalOpen, setIsJoinModalOpen ] = useState(false);
   const [ isCreateModalOpen, setIsCreateModalOpen ] = useState(false);
+
+  useEffect(() => {
+    // disconnect client from solace everytime they go to the main menu (home screen)
+    try {
+      solaceConnection.disconnect();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <div className="MainMenu">
