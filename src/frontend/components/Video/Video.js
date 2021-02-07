@@ -6,19 +6,18 @@ import Paho from "paho-mqtt";
 class VideoApp extends Component {
   constructor(props) {
     super(props);
-    this.player = null;
     this.playNewVideo = this.playNewVideo.bind(this);
     this.playVideo = this.playVideo.bind(this);
     this.pauseVideo = this.pauseVideo.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
     this.videoId = "";
     this.state = {
+      player: null,
       videoOptions: {
         height: '100%',
         width: '100%',
       }
     }
-    solaceConnection.register(this.handleMessage.bind(this))
   }
   
   handleMessage(message) {
@@ -29,33 +28,28 @@ class VideoApp extends Component {
     }
     
     if(obj.message === 'Pause press detected'){
-      try {
- 	 this.pauseVideo();
-	}
-	catch(err) {
-  	console.log("Pause error ".concat(err))
-	}
-      console.log("Pauses passed")
+ 	    this.pauseVideo();
     }
-  
   }
   
   playNewVideo(videoId) {
     this.videoId = videoId;
-    this.player.loadVideoById(this.videoId, 0);
+    this.state.player.loadVideoById(this.videoId, 0);
   }
 
   playVideo() {
-    this.player.playVideo();
+    console.log(this.state);
+    this.state.player.playVideo();
   }
 
   pauseVideo() {
-    this.player.pauseVideo();
+    this.state.player.pauseVideo();
   }
 
   onPlayerReady(event) {
     console.log("Player is ready: ", event);
-    this.player = event.target;
+    this.state.player =  event.target;
+    solaceConnection.register(this.handleMessage.bind(this))
   }
  
   onVideoPlay(event) {
@@ -79,6 +73,7 @@ class VideoApp extends Component {
 
   onVideoStateChange(event) {
     console.log("Video state changed: ", event);
+    console.log("state: ", this.state);
   }
 
   onVideoEnd() {
