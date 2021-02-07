@@ -16,7 +16,7 @@ function SideBar({ roomcode, username, queueVideo }) {
     solaceConnection.register(handleNewUser);
 
     // get initial list of people in the room
-    fetch('http://localhost:9000/getUsers', {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/getUsers`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -49,17 +49,16 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
 
     if (nickname !== '') {
       // CREATE ROOM AND THEN JOIN THAT ROOM
-
       try {
-        const roomCodeObject = await fetch('http://localhost:9000/createroom', { method: 'POST' }).then((response) =>
-          response.json()
-        );
+        const roomCodeObject = await fetch(`${process.env.REACT_APP_BACKEND_URL}/createroom`, {
+          method: 'POST'
+        }).then((response) => response.json());
 
         const roomcode = roomCodeObject.message;
         const payload = { roomcode: roomcode, username: nickname };
         setNewRoomCode(roomcode);
 
-        const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
+        const joinRoomResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/joinroom`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

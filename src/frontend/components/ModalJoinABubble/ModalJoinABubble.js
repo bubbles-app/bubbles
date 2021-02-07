@@ -51,7 +51,7 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
     try {
       const payload = { roomcode: roomcode, username: nickname };
 
-      const joinRoomResponse = await fetch('http://localhost:9000/joinroom', {
+      const joinRoomResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/joinroom`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
