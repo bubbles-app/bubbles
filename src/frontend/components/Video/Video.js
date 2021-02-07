@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import YouTube from 'react-youtube';
+import solaceConnection from '../../../backend/solace-connection';
+import Paho from "paho-mqtt";
 
 class VideoApp extends Component {
   constructor(props) {
     super(props);
     this.player = null;
     this.playNewVideo = this.playNewVideo.bind(this);
-    this.playVideo = this.playVideo.bind(this);
-    this.pauseVideo = this.pauseVideo.bind(this);
     this.videoId = "";
     this.state = {
       videoOptions: {
@@ -15,6 +15,21 @@ class VideoApp extends Component {
         width: '100%',
       }
     }
+    solaceConnection.register(this.handleMessage.bind(this))
+  }
+  
+  handleMessage(message) {
+    const obj = JSON.parse(message.payloadString);
+    if(obj.messageType === 'playPressed'){
+      console.log("Got message play pressed")
+      this.playVideo();
+    }
+    
+    if(obj.messageType === 'pausePressed'){
+      console.log("Got message pause pressed")
+      this.pauseVideo();
+    }
+  
   }
   
   playNewVideo(videoId) {
@@ -37,10 +52,17 @@ class VideoApp extends Component {
  
   onVideoPlay(event) {
     console.log("Video played at: ", event.target.getCurrentTime());
+    
+    let message = new Paho.Message(JSON.stringify({ messageType: 'playPressed', message: 'Play press detected'}))
+    message.destinationName = this.props.roomcode
+    solaceConnection.send(message)
   }
 
   onVideoPause(event) {
     console.log("Video paused at: ", event);
+    let message = new Paho.Message(JSON.stringify({ messageType: 'pausePressed', message: 'Pause press detected'}))
+    message.destinationName = this.props.roomcode
+    solaceConnection.send(message)
   }
 
   onVideoPlaybackRateChange(event) {
