@@ -8,7 +8,7 @@ function RoomScreen(props) {
   if (!props.location.state) return <Redirect to="/" />;
   const { roomcode, nickname } = props.location.state;
 
-  let video = new Video();
+  let video = new Video({roomcode: roomcode});
 
   return (
     <div className="RoomScreen">
