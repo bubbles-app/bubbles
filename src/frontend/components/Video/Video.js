@@ -6,6 +6,8 @@ class VideoApp extends Component {
     super(props);
     this.player = null;
     this.playNewVideo = this.playNewVideo.bind(this);
+    this.playVideo = this.playVideo.bind(this);
+    this.pauseVideo = this.pauseVideo.bind(this);
     this.videoId = "";
     this.state = {
       videoOptions: {
@@ -18,6 +20,14 @@ class VideoApp extends Component {
   playNewVideo(videoId) {
     this.videoId = videoId;
     this.player.loadVideoById(this.videoId, 0);
+  }
+
+  playVideo() {
+    this.player.playVideo();
+  }
+
+  pauseVideo() {
+    this.player.pauseVideo();
   }
 
   onPlayerReady(event) {
