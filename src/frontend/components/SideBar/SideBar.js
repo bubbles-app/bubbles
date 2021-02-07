@@ -6,7 +6,7 @@ import './SideBar.css';
 
 import solaceConnection from '../../../backend/solace-connection';
 
-function SideBar({ roomcode }) {
+function SideBar({ roomcode, queueVideo }) {
   const [ isPlayModalOpen, setIsPlayModalOpen ] = useState(false);
   const [ roomMembers, setRoomMembers ] = useState([]);
 
@@ -45,7 +45,9 @@ function SideBar({ roomcode }) {
         <SideBarList list={roomMembers} roomcode={roomcode} />
       </div>
       <div className="SideBar-Buttons">
-        <button className="play-button" onClick={() => setIsPlayModalOpen(true)}>play</button>
+        <button className="play-button" onClick={() => setIsPlayModalOpen(true)}>
+          play
+        </button>
         <button className="exit-button">exit</button>
       </div>
       <ModalPlayVideo
