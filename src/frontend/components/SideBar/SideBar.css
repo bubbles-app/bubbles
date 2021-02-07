@@ -11,6 +11,21 @@
   background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.349));
 }
 
+.RoomCodeLabel {
+  text-align: center;
+  padding: 10px;
+  border-radius: 20px;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  color: #8d6ca7;
+  background-color: #fff;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black;
+}
+
 .playlist-button {
   cursor: pointer;
   font-size: 100%;

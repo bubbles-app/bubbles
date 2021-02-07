@@ -19,7 +19,7 @@ function RoomScreen(props) {
   };
   return (
     <div className="RoomScreen">
-      <SideBar />
+      <SideBar roomcode={roomcode} />
       <div className="VideoSection">
         <Video {...videoOptions} />
       </div>
