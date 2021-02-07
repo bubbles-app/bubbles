@@ -1,7 +1,8 @@
-import './RoomScreen.css';
+import { Redirect } from 'react-router-dom';
 import Video from '../../components/Video/Video';
 import SideBar from '../../components/SideBar/SideBar';
-import { Redirect } from 'react-router-dom';
+
+import './RoomScreen.css';
 
 function RoomScreen(props) {
   if (!props.location.state) return <Redirect to="/" />;
