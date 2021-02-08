@@ -17,7 +17,7 @@
 
 .SideBarList-Items {
   max-height: 100px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   border-radius: 20px;
   background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.349));
@@ -26,25 +26,4 @@
 .SideBarList-Items > * {
   margin: 10px;
   color: #8d6ca7;
-}
-
-.SideBarList-Items::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-.SideBarList-Items::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 20px;
-}
-
-/* Handle */
-.SideBarList-Items::-webkit-scrollbar-thumb {
-  background: #8d6ca7;
-  border-radius: 20px;
-}
-
-/* Handle on hover */
-.SideBarList-Items::-webkit-scrollbar-thumb:hover {
-  background: #6f5a7e;
 }

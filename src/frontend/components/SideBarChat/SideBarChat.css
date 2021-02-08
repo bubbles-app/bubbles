@@ -6,6 +6,12 @@
   justify-content: flex-end;
 }
 
+.SideBarChat-Items {
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .SideBarChat-Item {
   margin: 10px;
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './SideBarChat.css';
 import Paho from 'paho-mqtt';
 
@@ -7,6 +7,7 @@ import solaceConnection from '../../../backend/solace-connection';
 function SideBarChat({ roomcode, username }) {
   const [ message, setMessage ] = useState('');
   const [ messages, setMessages ] = useState([]);
+  const anchor = useRef();
 
   useEffect(() => {
     solaceConnection.register(handleNewTextMessage);
@@ -23,6 +24,7 @@ function SideBarChat({ roomcode, username }) {
     } catch (error) {
       console.log(error);
     }
+    scrollToCurrentMessage();
   };
 
   const handleSubmit = (e) => {
@@ -37,17 +39,24 @@ function SideBarChat({ roomcode, username }) {
     setMessage('');
   };
 
+  const scrollToCurrentMessage = () => {
+    anchor.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="SideBarChat">
-      {messages.map((message, i) => {
-        const user = message.username;
-        const text = message.text;
-        return (
-          <p className="SideBarChat-Item" key={i}>
-            {user}: {text}
-          </p>
-        );
-      })}
+      <div className="SideBarChat-Items">
+        {messages.map((message, i) => {
+          const user = message.username;
+          const text = message.text;
+          return (
+            <p className="SideBarChat-Item" key={i}>
+              {user}: {text}
+            </p>
+          );
+        })}
+        <div ref={anchor} className="SideBarChat-anchor" />
+      </div>
       <form className="SideBarChat-Form" onSubmit={handleSubmit}>
         <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
       </form>
