@@ -1,0 +1,27 @@
+.ThemeChanger {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.ThemeChanger-Icon {
+  float: right;
+  cursor: pointer;
+}
+
+.ThemeChanger-Popover {
+  position: absolute;
+  z-index: 2;
+}
+
+.ThemeChanger-Cover {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
