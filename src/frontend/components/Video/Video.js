@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import YouTube from 'react-youtube';
 import solaceConnection from '../../../backend/solace-connection';
-import Paho from "paho-mqtt";
+import Paho from 'paho-mqtt';
 
 class VideoApp extends Component {
   constructor(props) {
@@ -10,85 +10,122 @@ class VideoApp extends Component {
     this.playVideo = this.playVideo.bind(this);
     this.pauseVideo = this.pauseVideo.bind(this);
     this.onPlayerReady = this.onPlayerReady.bind(this);
-    this.videoId = "";
+    this.getStateName = this.getStateName.bind(this);
+    this.videoId = '';
     this.state = {
       player: null,
       videoOptions: {
         height: '100%',
-        width: '100%',
+        width: '100%'
+      }
+    };
+  }
+
+  handleMessage(message) {
+    const obj = JSON.parse(message.payloadString);
+    if (obj.messageType === 'playPressed') {
+      this.playVideo();
+    }
+
+    if (obj.messageType === 'pausePressed') {
+      this.pauseVideo();
+    }
+
+    if (obj.messageType === 'videoStateChange') {
+      const eventCode = obj.eventCode;
+      const stateName = this.getStateName(eventCode);
+      const broadcastedVideoTime = obj.videoTime;
+      const currentVideoTime = this.state.player.getCurrentTime();
+
+      // only seek if difference in video time is greater than 1 sec
+      if (Math.abs(currentVideoTime - broadcastedVideoTime) > 1) {
+        this.state.player.seekTo(broadcastedVideoTime);
+        if (stateName === 'playing') {
+          this.playVideo();
+        } else if (stateName === 'paused') {
+          this.pauseVideo();
+        }
       }
     }
   }
-  
-  handleMessage(message) {
-    const obj = JSON.parse(message.payloadString);
-    console.log("Handle message here!");
-    if(obj.messageType === 'playPressed'){
-      this.playVideo();
-    }
-    
-    if(obj.messageType === 'pausePressed'){
- 	this.pauseVideo();
-    }
-  }
-  
+
   playNewVideo(videoId) {
     this.videoId = videoId;
     this.state.player.loadVideoById(this.videoId, 0);
   }
 
-  playVideo() {
-    console.log(this.state);
+  playVideo(event) {
     this.state.player.playVideo();
   }
 
-  pauseVideo() {
+  pauseVideo(event) {
     this.state.player.pauseVideo();
   }
 
   onPlayerReady(event) {
-    console.log("Player is ready: ", event);
-    this.state.player =  event.target;
-    solaceConnection.register(this.handleMessage.bind(this))
+    this.state.player = event.target;
+    solaceConnection.register(this.handleMessage.bind(this));
   }
- 
+
   onVideoPlay(event) {
-    console.log("Video played at: ", event.target.getCurrentTime());
-    
-    let message = new Paho.Message(JSON.stringify({messageType: 'playPressed', message: 'Play press detected'}));
+    let message = new Paho.Message(JSON.stringify({ messageType: 'playPressed', message: 'Play press detected' }));
     message.destinationName = this.props.roomcode;
     solaceConnection.send(message);
   }
 
   onVideoPause(event) {
-    console.log("Video paused at: ", event);
-    let message = new Paho.Message(JSON.stringify({messageType: 'pausePressed', message: 'Pause press detected'}));
+    let message = new Paho.Message(JSON.stringify({ messageType: 'pausePressed', message: 'Pause press detected' }));
     message.destinationName = this.props.roomcode;
     solaceConnection.send(message);
   }
 
-  onVideoPlaybackRateChange(event) {
-    console.log("Video playback rate changed: ", event);
-  }
+  onVideoPlaybackRateChange(event) {}
 
   onVideoStateChange(event) {
-    console.log("Video state changed: ", event);
-    console.log("state: ", this.state);
+    const code = event.data;
+    const videoTime = event.target.getCurrentTime();
+    console.log(`Video state ${this.getStateName(code)} at: `, videoTime);
+
+    // broadcase this video state change (this is how we handle seeks for now)
+    let message = new Paho.Message(
+      JSON.stringify({ messageType: 'videoStateChange', eventCode: code, videoTime: videoTime })
+    );
+    message.destinationName = this.props.roomcode;
+    solaceConnection.send(message);
   }
 
-  onVideoEnd() {
-    console.log("Video ended");
+  onVideoEnd(event) {
+    console.log('Video ended');
   }
-  
+
   onVideoError(event) {
-    console.log("Video error: ", event);
+    console.log('Video error: ', event);
+  }
+
+  getStateName(eventCode) {
+    switch (eventCode) {
+      case -1:
+        return 'unstarted';
+      case 0:
+        return 'ended';
+      case 1:
+        return 'playing';
+      case 2:
+        return 'paused';
+      case 3:
+        return 'buffering';
+      case 5:
+        return 'video cued';
+      default:
+        return 'invalid code';
+    }
   }
 
   render() {
     return (
       <YouTube
         videoId={this.videoId}
-        className={"Video"}
+        className={'Video'}
         opts={this.state.videoOptions}
         onReady={this.onPlayerReady.bind(this)}
         onPlay={this.onVideoPlay.bind(this)}
