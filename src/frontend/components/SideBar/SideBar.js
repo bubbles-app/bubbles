@@ -3,6 +3,8 @@ import ModalPlayVideo from '../ModalPlayVideo/ModalPlayVideo';
 import SideBarLabel from '../SideBarLabel/SideBarLabel';
 import SideBarList from '../SideBarList/SideBarList';
 import SideBarChat from '../SideBarChat/SideBarChat';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlayCircle, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 import './SideBar.css';
 
 import solaceConnection from '../../../backend/solace-connection';
@@ -53,9 +55,13 @@ function SideBar({ roomcode, username, queueVideo }) {
       </div>
       <div className="SideBar-Buttons">
         <button className="play-button" onClick={() => setIsPlayModalOpen(true)}>
+          <FontAwesomeIcon icon={faPlayCircle} style={{ marginRight: '10px' }} />
           play
         </button>
-        <button className="exit-button">exit</button>
+        <button className="exit-button">
+          <FontAwesomeIcon icon={faDoorOpen} style={{ marginRight: '10px' }} />
+          exit
+        </button>
       </div>
       <ModalPlayVideo
         isOpen={isPlayModalOpen}

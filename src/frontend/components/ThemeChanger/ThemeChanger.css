@@ -11,6 +11,7 @@
 .ThemeChanger-Icon {
   float: right;
   cursor: pointer;
+  margin: 5px;
 }
 
 .ThemeChanger-Popover {

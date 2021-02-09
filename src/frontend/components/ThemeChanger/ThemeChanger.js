@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ChromePicker } from 'react-color';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import './ThemeChanger.css';
 
 function ThemeChanger({ themeColor, setThemeColor }) {
@@ -14,9 +16,11 @@ function ThemeChanger({ themeColor, setThemeColor }) {
 
   return (
     <div className="ThemeChanger">
-      <i className="ThemeChanger-Icon" onClick={() => setShowColorPicker(!showColorPicker)}>
-        🎨
-      </i>
+      <FontAwesomeIcon
+        icon={faPalette}
+        className="ThemeChanger-Icon"
+        onClick={() => setShowColorPicker(!showColorPicker)}
+      />
       {showColorPicker ? (
         <div className="ThemeChanger-Popover">
           <div className="ThemeChanger-Cover" onClick={() => setShowColorPicker(false)} />
