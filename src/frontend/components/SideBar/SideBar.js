@@ -28,6 +28,24 @@ function SideBar({ roomcode, username, queueVideo }) {
       .then((response) => response.json())
       .then((data) => setRoomMembers(data.users))
       .catch((err) => console.log(err));
+
+    // get video that's already playing
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/getcurrentvideo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ roomcode })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const urlString = data.url;
+        const url = new URL(urlString);
+        const videoID = url.searchParams.get('v');
+
+        queueVideo(videoID);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const handleNewUser = (message) => {

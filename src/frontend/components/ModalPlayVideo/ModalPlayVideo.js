@@ -34,13 +34,24 @@ function ModalPlayVideo({ isOpen, closeModal, contentLabel, queueVideo, roomcode
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      let url = new URL(document.getElementById('youtube-link-input').value);
+      let urlString = document.getElementById('youtube-link-input').value;
+      let url = new URL(urlString);
       queueVideo(url.searchParams.get('v'));
 
       // publish new video to solace
       let msg = new Paho.Message(JSON.stringify({ messageType: 'newVideoURL', url: url }));
       msg.destinationName = roomcode;
       solaceConnection.send(msg);
+
+      // update backend
+      const payload = { roomcode, url: urlString };
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/setcurrentvideo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      }).catch((err) => console.log(err));
     } catch (error) {
       console.log(error);
     }

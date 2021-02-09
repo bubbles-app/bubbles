@@ -51,7 +51,9 @@ class VideoApp extends Component {
 
   playNewVideo(videoId) {
     this.videoId = videoId;
-    this.state.player.loadVideoById(this.videoId, 0);
+    if (this.state.player) {
+      this.state.player.loadVideoById(this.videoId, 0);
+    }
   }
 
   playVideo(event) {
@@ -64,6 +66,10 @@ class VideoApp extends Component {
 
   onPlayerReady(event) {
     this.state.player = event.target;
+    // videoId will be some video if the user joined a room with an already-playing video
+    if (this.videoId !== '') {
+      this.playNewVideo(this.videoId);
+    }
     solaceConnection.register(this.handleMessage.bind(this));
   }
 
