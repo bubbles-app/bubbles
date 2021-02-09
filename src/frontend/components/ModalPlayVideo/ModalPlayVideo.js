@@ -12,6 +12,8 @@ const MODAL_STYLES = {
     backgroundColor: 'none'
   },
   content: {
+    width: '15%',
+    minWidth: '200px',
     borderRadius: '10px',
     top: '50%',
     left: '50%',

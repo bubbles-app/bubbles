@@ -55,10 +55,10 @@ function SideBar({ roomcode, username, queueVideo }) {
           <FontAwesomeIcon icon={faPlayCircle} style={{ marginRight: '10px' }} />
           play
         </button>
-        <button className="exit-button">
+        {/* <button className="exit-button">
           <FontAwesomeIcon icon={faDoorOpen} style={{ marginRight: '10px' }} />
           exit
-        </button>
+        </button> */}
       </div>
       <ModalPlayVideo
         isOpen={isPlayModalOpen}
