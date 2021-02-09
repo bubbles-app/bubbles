@@ -29,11 +29,11 @@ const MODAL_STYLES = {
 function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
   const [ nickname, setNickname ] = useState('');
   const [ newRoomCode, setNewRoomCode ] = useState('');
+  const [ isFetching, setIsFetching ] = useState(false);
   const [ networkErrorEncountered, setNetworkErrorEncountered ] = useState(false);
   const [ redirectToRoomScreen, setRedirectToRoomScreen ] = useState(false);
 
   if (redirectToRoomScreen) {
-    console.log('redirecting to', newRoomCode);
     return (
       <Redirect
         to={{
@@ -46,6 +46,7 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsFetching(true);
 
     if (nickname !== '') {
       // CREATE ROOM AND THEN JOIN THAT ROOM
@@ -57,6 +58,8 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
         const roomcode = roomCodeObject.message;
         const payload = { roomcode: roomcode, username: nickname };
         setNewRoomCode(roomcode);
+
+        console.log(payload);
 
         const joinRoomResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/joinroom`, {
           method: 'POST',
@@ -73,14 +76,12 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
               console.log('Succesfully connected to Solace Cloud.', response);
               // subscribe to topic
               solaceConnection.subscribe(roomcode);
-              console.log(solaceConnection);
-
               // redirect
               setRedirectToRoomScreen(true);
             })
             .catch((error) => {
               console.log('Unable to establish connection with Solace Cloud, see above logs for more details.', error);
-              resetForm();
+              setNetworkErrorEncountered(true);
             });
         } else {
           setNetworkErrorEncountered(true);
@@ -96,13 +97,18 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
 
   const resetForm = () => {
     setNickname('');
+    setIsFetching(false);
   };
 
   return (
     <Modal
       isOpen={isOpen}
       // onAfterOpen={afterOpenModal}
-      onRequestClose={closeModal}
+      onRequestClose={() => {
+        resetForm();
+        setNetworkErrorEncountered(false);
+        closeModal();
+      }}
       style={MODAL_STYLES}
       contentLabel={contentLabel}
     >
@@ -114,8 +120,10 @@ function ModalCreateABubble({ isOpen, closeModal, contentLabel }) {
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
           maxLength={15}
+          disabled={isFetching}
+          style={{ cursor: isFetching ? 'not-allowed' : 'auto' }}
         />
-        <button className="modal-submit-button" disabled={nickname === ''}>
+        <button className="modal-submit-button" disabled={nickname === '' || isFetching}>
           join
         </button>
       </form>

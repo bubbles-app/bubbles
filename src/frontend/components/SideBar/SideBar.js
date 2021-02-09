@@ -31,13 +31,10 @@ function SideBar({ roomcode, username, queueVideo }) {
   }, []);
 
   const handleNewUser = (message) => {
-    console.log('old members', roomMembers);
-
     try {
       const obj = JSON.parse(message.payloadString);
       if (obj.messageType === 'userJoined') {
         setRoomMembers((roomMembers) => {
-          console.log('OLD MEMBERS', roomMembers);
           return [ ...roomMembers, obj.username ];
         });
       }

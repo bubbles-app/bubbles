@@ -33,7 +33,7 @@
   border: 0;
   margin: 0;
   /* padding: 10px; */
-  height: 30px;
+  height: 32px;
   width: 60px;
   border-radius: 0px 10px 10px 0px;
 
@@ -43,7 +43,7 @@
 
 .modal-submit-button:disabled {
   background-color: #7c7c7c;
-  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* ANIMATIONS: */

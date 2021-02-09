@@ -30,11 +30,11 @@ const MODAL_STYLES = {
 function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
   const [ roomcode, setRoomCode ] = useState('');
   const [ nickname, setNickname ] = useState('');
+  const [ isFetching, setIsFetching ] = useState(false);
   const [ networkErrorEncountered, setNetworkErrorEncountered ] = useState(false);
   const [ redirectToRoomScreen, setRedirectToRoomScreen ] = useState(false);
 
   if (redirectToRoomScreen) {
-    console.log('redirecting to', roomcode);
     return (
       <Redirect
         to={{
@@ -47,10 +47,10 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsFetching(true);
 
     try {
       const payload = { roomcode: roomcode, username: nickname };
-
       const joinRoomResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/joinroom`, {
         method: 'POST',
         headers: {
@@ -72,7 +72,6 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
           })
           .catch((error) => {
             console.log('Unable to establish connection with Solace Cloud, see above logs for more details.', error);
-            resetForm();
           });
       } else {
         setNetworkErrorEncountered(true);
@@ -88,13 +87,18 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
   const resetForm = () => {
     setRoomCode('');
     setNickname('');
+    setIsFetching(false);
   };
 
   return (
     <Modal
       isOpen={isOpen}
       // onAfterOpen={afterOpenModal}
-      onRequestClose={closeModal}
+      onRequestClose={() => {
+        resetForm();
+        setNetworkErrorEncountered(false);
+        closeModal();
+      }}
       style={MODAL_STYLES}
       contentLabel={contentLabel}
     >
@@ -105,6 +109,8 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
           type="text"
           value={roomcode}
           onChange={(e) => setRoomCode(e.target.value)}
+          disabled={isFetching}
+          style={{ cursor: isFetching ? 'not-allowed' : 'auto' }}
         />
         <p className="modal-join-header">nickname</p>
         <input
@@ -113,10 +119,14 @@ function ModalJoinABubble({ isOpen, closeModal, contentLabel }) {
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
           maxLength={15}
+          disabled={isFetching}
+          style={{ cursor: isFetching ? 'not-allowed' : 'auto' }}
         />
-        <button className="modal-join-submit-button">join</button>
+        <button className="modal-join-submit-button" disabled={nickname === '' || roomcode === '' || isFetching}>
+          join
+        </button>
       </form>
-      <p style={{ marginBottom: 0, color: '#f44', display: networkErrorEncountered ? 'block' : 'none' }}>
+      <p style={{ marginBottom: 0, color: '#f44', display: !networkErrorEncountered || isFetching ? 'none' : 'block' }}>
         Please enter a valid room code.
       </p>
     </Modal>

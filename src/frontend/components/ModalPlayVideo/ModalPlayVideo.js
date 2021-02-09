@@ -47,7 +47,6 @@ function ModalPlayVideo({ isOpen, closeModal, contentLabel, queueVideo, roomcode
   };
 
   const handleNewVideoURL = (message) => {
-    console.log('NEW MSG');
     try {
       const obj = JSON.parse(message.payloadString);
       if (obj.messageType === 'newVideoURL') {

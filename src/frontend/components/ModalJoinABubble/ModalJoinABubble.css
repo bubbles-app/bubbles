@@ -55,6 +55,16 @@
   background-color: #8d6ca7;
 }
 
+.modal-join-submit-button:disabled {
+  background-color: #7c7c7c;
+}
+
+.modal-join-submit-button:disabled,
+.modal-join-code-input:disabled,
+.modal-join-name-input:disabled {
+  cursor: not-allowed;
+}
+
 /* ANIMATIONS: */
 
 .ReactModal__Overlay {
