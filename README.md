@@ -3,6 +3,6 @@ Bubbles is a concurrent video streamer built on React, Node Express, and Solace 
 
 ## Getting started
 Start development server on localhost:3000
-`git clone <repo>
-npm install
-npm start`
+`git clone <repo>`
+`npm install`
+`npm start`
