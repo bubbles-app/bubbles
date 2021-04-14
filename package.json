@@ -15,6 +15,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^17.0.1",
     "react-modal": "^3.12.1",
+    "react-responsive": "^8.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "react-video-js-player": "^1.1.1",
@@ -31,11 +32,22 @@
     "deploy": "node generateCNAME.js && gh-pages -d build"
   },
   "eslintConfig": {
-    "extends": [ "react-app", "react-app/jest" ]
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
-    "production": [ ">0.2%", "not dead", "not op_mini all" ],
-    "development": [ "last 1 chrome version", "last 1 firefox version", "last 1 safari version" ]
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
     "gh-pages": "^3.1.0"

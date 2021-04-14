@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import ModalPlayVideo from '../ModalPlayVideo/ModalPlayVideo';
 import SideBarLabel from '../SideBarLabel/SideBarLabel';
 import SideBarList from '../SideBarList/SideBarList';
 import SideBarChat from '../SideBarChat/SideBarChat';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
+import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 import './SideBar.css';
 
 import solaceConnection from '../../../backend/solace-connection';
@@ -12,6 +13,9 @@ import solaceConnection from '../../../backend/solace-connection';
 function SideBar({ roomcode, username, queueVideo }) {
   const [ isPlayModalOpen, setIsPlayModalOpen ] = useState(false);
   const [ roomMembers, setRoomMembers ] = useState([]);
+  const isTabletOrMobileDevice = useMediaQuery({
+    query: '(max-device-width: 700px)'
+  });
 
   useEffect(() => {
     // register the publish listener
@@ -61,23 +65,46 @@ function SideBar({ roomcode, username, queueVideo }) {
     }
   };
 
+  // responsive styling
+  let sidebarStyle = {};
+  if (isTabletOrMobileDevice) {
+    sidebarStyle = { width: '100%', margin: '0', marginTop: '10px' };
+  }
+
+  let sidebarButtons = (
+    <div className="SideBar-Buttons">
+      <button className="play-button" onClick={() => setIsPlayModalOpen(true)}>
+        <FontAwesomeIcon icon={faPlayCircle} style={{ marginRight: '10px' }} />
+        play
+      </button>
+      {/* <button className="exit-button">
+      <FontAwesomeIcon icon={faDoorOpen} style={{ marginRight: '10px' }} />
+      exit
+    </button> */}
+    </div>
+  );
+
   return (
-    <div className="SideBar">
-      <div className="SideBar-Top">
-        <SideBarLabel label={roomcode} className="RoomCodeLabel" />
-        <SideBarList list={roomMembers} roomcode={roomcode} />
-        <SideBarChat roomcode={roomcode} username={username} />
-      </div>
-      <div className="SideBar-Buttons">
-        <button className="play-button" onClick={() => setIsPlayModalOpen(true)}>
-          <FontAwesomeIcon icon={faPlayCircle} style={{ marginRight: '10px' }} />
-          play
-        </button>
-        {/* <button className="exit-button">
-          <FontAwesomeIcon icon={faDoorOpen} style={{ marginRight: '10px' }} />
-          exit
-        </button> */}
-      </div>
+    <div className="SideBar" style={sidebarStyle}>
+      {
+        (isTabletOrMobileDevice) ?
+        <>
+          {sidebarButtons}
+          <div className="SideBar-Top">
+            <SideBarLabel label={roomcode} className="RoomCodeLabel" />
+            <SideBarChat roomcode={roomcode} username={username} />
+          </div>
+        </>
+        :
+        <>
+          <div className="SideBar-Top">
+            <SideBarLabel label={roomcode} className="RoomCodeLabel" />
+            <SideBarList list={roomMembers} roomcode={roomcode} />
+            <SideBarChat roomcode={roomcode} username={username} />
+          </div>
+          {sidebarButtons}
+        </> 
+      }
       <ModalPlayVideo
         isOpen={isPlayModalOpen}
         closeModal={() => setIsPlayModalOpen(false)}

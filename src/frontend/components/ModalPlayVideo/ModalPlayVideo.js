@@ -75,7 +75,7 @@ function ModalPlayVideo({ isOpen, closeModal, contentLabel, queueVideo, roomcode
     <Modal isOpen={isOpen} onRequestClose={closeModal} style={MODAL_STYLES} contentLabel={contentLabel}>
       <p className="modal-play-header">youtube video url</p>
       <form className="modal-play-form" onSubmit={handleSubmit}>
-        <input id="youtube-link-input" className="modal-play-input" type="text" />
+        <input id="youtube-link-input" className="modal-play-input" type="text" autocomplete="off" />
         <button className="modal-play-submit-button">play</button>
       </form>
     </Modal>

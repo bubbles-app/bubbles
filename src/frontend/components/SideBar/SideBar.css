@@ -1,8 +1,13 @@
 .SideBar {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 15%;
   margin: 20px;
+}
+
+.SideBar > * {
+  width: 100%;
 }
 
 .SideBar-Top {

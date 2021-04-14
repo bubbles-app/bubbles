@@ -4,11 +4,8 @@
 }
 
 .VideoSection {
-  padding: 20px;
-}
-
-.VideoSection {
-  width: 85%;
+  width: 100%;
+  margin: 20px;
 }
 
 .VideoSection > * {
