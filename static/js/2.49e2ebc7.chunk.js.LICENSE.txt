@@ -1,4 +1,10 @@
 /*
+    object-assign
+    (c) Sindre Sorhus
+    @license MIT
+    */
+
+/*
 object-assign
 (c) Sindre Sorhus
 @license MIT
@@ -26,6 +32,15 @@ object-assign
  * Font Awesome Free 5.15.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <http://feross.org>
+ * @license  MIT
+ */
+
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /**
 * @link https://github.com/gajus/sister for the canonical source repository
